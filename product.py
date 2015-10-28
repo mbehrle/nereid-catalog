@@ -516,7 +516,7 @@ class Product:
         return self.images
 
 
-class ProductsRelated(ModelSQL):
+class ProductsRelated(ModelSQL, ModelView):
     "Related Product"
     __name__ = 'product.product-product.product'
     _table = 'product_product_rel'
