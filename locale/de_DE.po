@@ -8,7 +8,7 @@ msgstr "URI kann nur einmal pro Artikel vergeben werden."
 
 msgctxt "error:product.tree_node:"
 msgid "recursion_error"
-msgstr "Rekursionsfehler"
+msgstr ""
 
 msgctxt "field:product.media,create_date:"
 msgid "Create Date"
@@ -152,7 +152,7 @@ msgstr "Variantenmedien"
 
 msgctxt "model:product.product-product.product,name:"
 msgid "Related Product"
-msgstr "Verbundener Artikel"
+msgstr "Verwandtes Produkt"
 
 msgctxt "view:nereid.website:"
 msgid "Catalog Config."
@@ -196,7 +196,7 @@ msgstr "E-Commerce Details"
 
 msgctxt "view:product.product:"
 msgid "Related Products"
-msgstr "Verbundene Artikel"
+msgstr "Verwandte Produkte"
 
 msgctxt "view:product.product:"
 msgid "Up-Sells"
