@@ -91,9 +91,9 @@ class ProductTemplate:
         'get_products_displayed_on_eshop'
     )
 
-    long_description = fields.Text('Long Description')
+    long_description = fields.Text('Long Description', translate=True)
 
-    description = fields.Text("Description")
+    description = fields.Text("Description", translate=True)
     media = fields.One2Many("product.media", "template", "Media")
     images = fields.Function(
         fields.One2Many('nereid.static.file', None, 'Images'),
@@ -146,7 +146,7 @@ class Product:
     )
 
     displayed_on_eshop = fields.Boolean('Displayed on E-Shop?', select=True)
-    long_description = fields.Text('Long Description')
+    long_description = fields.Text('Long Description', translate=True)
     media = fields.One2Many(
         "product.media", "product", "Media", states={
             'invisible': Bool(Eval('use_template_images'))
