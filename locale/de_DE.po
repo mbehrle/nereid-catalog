@@ -60,7 +60,7 @@ msgstr "Bild"
 
 msgctxt "field:product.product,displayed_on_eshop:"
 msgid "Displayed on E-Shop?"
-msgstr "Anzeige im Webshop"
+msgstr "Anzeige im Webshop (im aktuellen Kanal)"
 
 msgctxt "field:product.product,images:"
 msgid "Images"
