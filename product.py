@@ -37,7 +37,8 @@ class ProductMedia(ModelSQL, ModelView):
 
     sequence = fields.Integer("Sequence", required=True, select=True)
     static_file = fields.Many2One(
-        "nereid.static.file", "Static File", required=True, select=True)
+        "nereid.static.file", "Static File", required=True, select=True,
+        ondelete='CASCADE')
     product = fields.Many2One("product.product", "Product", select=True)
     template = fields.Many2One("product.template", "Template", select=True)
 
