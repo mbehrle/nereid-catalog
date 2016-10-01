@@ -48,7 +48,7 @@ major_version = int(major_version)
 minor_version = int(minor_version)
 
 MODULE2PREFIX = {
-    'product_notebook': 'openlabs',
+    'product_notebook': 'fio',
 }
 
 requires = []
@@ -94,9 +94,9 @@ setup(
     },
     package_data={
         'trytond.modules.nereid_catalog':
-            info.get('xml', [])
-            + ['tryton.cfg', 'locale/*.po', 'tests/*.rst', 'view/*.xml']
-            + ['i18n/*.pot', 'i18n/pt_BR/LC_MESSAGES/*'],
+        info.get('xml', []) +
+        ['tryton.cfg', 'locale/*.po', 'tests/*.rst', 'view/*.xml'] +
+        ['i18n/*.pot', 'i18n/pt_BR/LC_MESSAGES/*'],
     },
     license='BSD',
     install_requires=requires,

@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from collections import deque
-from sql import Table, Literal
 
 from nereid import render_template, route
 from nereid.globals import session, request, current_app
 from nereid.helpers import slugify, url_for
-from nereid import jsonify, Markup
+from nereid import jsonify, Markup, current_locale
 from nereid.contrib.pagination import Pagination
 from nereid.contrib.sitemap import SitemapIndex, SitemapSection
 from werkzeug.exceptions import NotFound
@@ -13,16 +12,13 @@ from flask.ext.babel import format_currency
 
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.pyson import Eval, Not, Bool
-from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
-from trytond import backend
 from sql import Null
 
 __all__ = [
     'Product', 'ProductsRelated', 'ProductTemplate',
     'ProductMedia', 'ProductCategory'
 ]
-__metaclass__ = PoolMeta
 
 DEFAULT_STATE = {'invisible': Not(Bool(Eval('displayed_on_eshop')))}
 DEFAULT_STATE2 = {
@@ -41,6 +37,10 @@ class ProductMedia(ModelSQL, ModelView):
         ondelete='CASCADE')
     product = fields.Many2One("product.product", "Product", select=True)
     template = fields.Many2One("product.template", "Template", select=True)
+    url = fields.Function(fields.Char("URL"), "get_url")
+
+    def get_url(self, name):
+        return self.static_file.url
 
     @classmethod
     def __setup__(cls):
@@ -48,43 +48,13 @@ class ProductMedia(ModelSQL, ModelView):
 
         cls._order.insert(0, ('sequence', 'ASC'))
 
-    @classmethod
-    def __register__(cls, module_name):
-        TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-
-        super(ProductMedia, cls).__register__(module_name)
-
-        media_table = cls.__table__()
-
-        if TableHandler.table_exist(cursor, 'product_product_imageset'):
-            # Migrate data from ProductImageSet table to ProductMedia table
-            imageset_table = Table('product_product_imageset')
-
-            cursor.execute(*media_table.insert(
-                columns=[
-                    media_table.sequence,
-                    media_table.product, media_table.template,
-                    media_table.static_file,
-                ],
-                values=imageset_table.select(
-                    Literal(10),
-                    imageset_table.product, imageset_table.template,
-                    imageset_table.image
-                )
-            ))
-
-            TableHandler.drop_table(
-                cursor, 'product.product.imageset', 'product_product_imageset',
-                cascade=True
-            )
-
     @staticmethod
     def default_sequence():
         return 10
 
 
 class ProductTemplate:
+    __metaclass__ = PoolMeta
     __name__ = "product.template"
 
     products_displayed_on_eshop = fields.Function(
@@ -129,6 +99,7 @@ class ProductTemplate:
 
 class Product:
     "Product extension for Nereid"
+    __metaclass__ = PoolMeta
     __name__ = "product.product"
 
     #: Decides the number of products that would be remebered.
@@ -147,12 +118,8 @@ class Product:
     )
 
     displayed_on_eshop = fields.Boolean('Displayed on E-Shop?', select=True)
-    long_description = fields.Text('Long Description', translate=True)
-    media = fields.One2Many(
-        "product.media", "product", "Media", states={
-            'invisible': Bool(Eval('use_template_images'))
-        }, depends=['use_template_images']
-    )
+    long_description = fields.Text('Long Description')
+    media = fields.One2Many("product.media", "product", "Media")
     images = fields.Function(
         fields.One2Many('nereid.static.file', None, 'Images'),
         getter='get_product_images'
@@ -169,7 +136,17 @@ class Product:
         fields.Many2One('nereid.static.file', 'Image'), 'get_default_image',
     )
     use_template_description = fields.Boolean("Use template's description")
-    use_template_images = fields.Boolean("Use template's images")
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Product, cls).view_attributes() + [
+            ('//page[@id="desc"]', 'states', {
+                'invisible': Bool(Eval('use_template_description'))
+            }), ('//page[@id="ecomm_det"]', 'states', {
+                'invisible': Not(Bool(Eval('displayed_on_eshop')))
+            }), ('//page[@id="related_products"]', 'states', {
+                'invisible': Not(Bool(Eval('displayed_on_eshop')))
+            })]
 
     @classmethod
     def copy(cls, products, default=None):
@@ -212,18 +189,6 @@ class Product:
         })
         cls.per_page = 12
 
-    @classmethod
-    def __register__(cls, module_name):
-        TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        table = TableHandler(cursor, cls, module_name)
-
-        # Drop contraint for Unique URI on database
-        # Now using validation method for that purpose
-        table.drop_constraint('uri_uniq')
-
-        super(Product, cls).__register__(module_name)
-
     @staticmethod
     def default_displayed_on_eshop():
         return False
@@ -239,10 +204,6 @@ class Product:
 
     @staticmethod
     def default_use_template_description():
-        return True
-
-    @staticmethod
-    def default_use_template_images():
         return True
 
     @classmethod
@@ -328,7 +289,7 @@ class Product:
                     product_val[field] = getattr(product, field)
                 product_val['sale_price'] = format_currency(
                     product.sale_price(),
-                    request.nereid_currency.code
+                    current_locale.currency.code
                 )
                 response.append(product_val)
 
@@ -511,12 +472,12 @@ class Product:
     def get_images(self):
         """
         Get images of product variant.
-        If the product is set to use the template's images, then
-        the template images is sent back.
+        Fallback to template's images if there are no images
+        for product.
         """
-        if self.use_template_images:
-            return self.template.images
-        return self.images
+        if self.images:
+            return self.images
+        return self.template.images
 
 
 class ProductsRelated(ModelSQL, ModelView):
@@ -536,6 +497,7 @@ class ProductsRelated(ModelSQL, ModelView):
 
 
 class ProductCategory:
+    __metaclass__ = PoolMeta
     __name__ = 'product.category'
 
     @staticmethod
