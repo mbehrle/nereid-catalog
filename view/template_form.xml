@@ -2,12 +2,11 @@
 <!-- This file is part of Nereid.  The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="//field[@name='products']" position="replace">
+    <xpath expr="/form/notebook/page/field[@name='products']" position="replace">
+          <field name="products" colspan="4"
+              view_ids="product.product_view_tree"/>
     </xpath>
     <xpath expr="/form/notebook/page[@id='general']" position="after">
-        <page name="products">
-            <field name="products"/>
-        </page>
         <page string="Description" id="template-description">
             <group col="2" colspan="6" yexpand="1" yfill="1" id="product_description">
                 <separator name="description"/>
