@@ -110,13 +110,11 @@ class Product:
     #:
     #: .. versionadded:: 0.3
     json_allowed_fields = set(['rec_name', 'sale_price', 'id', 'uri'])
-
     uri = fields.Char(
         'URI', select=True, states=DEFAULT_STATE2
     )
-
     displayed_on_eshop = fields.Boolean('Displayed on E-Shop?', select=True)
-    long_description = fields.Text('Long Description')
+    long_description = fields.Text('Long Description', translate=True)
     media = fields.One2Many("product.media", "product", "Media")
     images = fields.Function(
         fields.One2Many('nereid.static.file', None, 'Images'),
