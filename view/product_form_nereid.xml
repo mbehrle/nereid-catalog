@@ -2,9 +2,7 @@
 <!-- This file is part of Nereid.  The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/label[@name=&quot;active&quot;]"
-            position="before">
-            <newline/>
+    <xpath expr="/form/field[@name='active']" position="after">
             <label name="displayed_on_eshop"/>
             <field name="displayed_on_eshop"/>
             <label name="use_template_description"/>
