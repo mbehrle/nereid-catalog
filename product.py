@@ -61,10 +61,8 @@ class ProductTemplate:
         fields.One2Many('product.product', None, 'Products (Disp. on eShop)'),
         'get_products_displayed_on_eshop'
     )
-
-    long_description = fields.Text('Long Description', translate=True)
-
     description = fields.Text("Description", translate=True)
+    long_description = fields.Text('Long Description', translate=True)
     media = fields.One2Many("product.media", "template", "Media")
     images = fields.Function(
         fields.One2Many('nereid.static.file', None, 'Images'),
@@ -140,13 +138,19 @@ class Product:
     @classmethod
     def view_attributes(cls):
         return super(Product, cls).view_attributes() + [
-            ('//page[@id="desc"]', 'states', {
+            ('//page[@id="ecomm_det"]', 'states', {
+                'invisible': Not(Bool(Eval('displayed_on_eshop')))
+            }),
+            ('//page[@id="related_products"]', 'states', {
+                'invisible': Not(Bool(Eval('displayed_on_eshop')))
+            }),
+            ('//group[@id="description"]', 'states', {
                 'invisible': Bool(Eval('use_template_description'))
-            }), ('//page[@id="ecomm_det"]', 'states', {
-                'invisible': Not(Bool(Eval('displayed_on_eshop')))
-            }), ('//page[@id="related_products"]', 'states', {
-                'invisible': Not(Bool(Eval('displayed_on_eshop')))
-            })]
+            }),
+            ('//page[@id="template-description"]', 'states', {
+                'invisible': Bool(Eval('use_template_description'))
+            }),
+            ]
 
     @classmethod
     def copy(cls, products, default=None):
