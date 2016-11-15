@@ -504,8 +504,3 @@ class ProductCategory:
     def order_rec_name(tables):
         table, _ = tables[None]
         return [table.parent == Null, table.parent, table.name]
-
-    @classmethod
-    def __setup__(cls):
-        super(ProductCategory, cls).__setup__()
-        cls.rec_name.string = "Parent/name"
