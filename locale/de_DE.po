@@ -8,7 +8,7 @@ msgstr "URI kann nur einmal pro Artikel vergeben werden."
 
 msgctxt "error:product.tree_node:"
 msgid "recursion_error"
-msgstr ""
+msgstr "Rekursionsfehler"
 
 msgctxt "field:product.media,create_date:"
 msgid "Create Date"
@@ -42,6 +42,10 @@ msgctxt "field:product.media,template:"
 msgid "Template"
 msgstr "Artikel"
 
+msgctxt "field:product.media,url:"
+msgid "URL"
+msgstr "URL"
+
 msgctxt "field:product.media,write_date:"
 msgid "Write Date"
 msgstr "Zuletzt geändert"
@@ -74,6 +78,10 @@ msgctxt "field:product.product,media:"
 msgid "Media"
 msgstr "Medien"
 
+msgctxt "field:product.product,products_displayed_on_eshop:"
+msgid "Products (Disp. on eShop)"
+msgstr "Artikel (im Webshop angezeigt)"
+
 msgctxt "field:product.product,up_sells:"
 msgid "Up-Sells"
 msgstr "Up-Sells"
@@ -85,10 +93,6 @@ msgstr "URI"
 msgctxt "field:product.product,use_template_description:"
 msgid "Use template's description"
 msgstr "Beschreibung des Artikels verwenden"
-
-msgctxt "field:product.product,use_template_images:"
-msgid "Use template's images"
-msgstr "Bilder des Artikels verwenden"
 
 msgctxt "field:product.product-product.product,create_date:"
 msgid "Create Date"
@@ -185,10 +189,6 @@ msgstr "Medien"
 msgctxt "view:product.product:"
 msgid "Cross-Sells"
 msgstr "Kreuzverkäufe (Cross-Sells)"
-
-msgctxt "view:product.product:"
-msgid "Description"
-msgstr "Beschreibung"
 
 msgctxt "view:product.product:"
 msgid "E-Commerce Details"
