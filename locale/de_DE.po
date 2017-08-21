@@ -94,6 +94,10 @@ msgctxt "field:product.product,use_template_description:"
 msgid "Use template's description"
 msgstr "Beschreibung des Artikels verwenden"
 
+msgctxt "field:product.product,use_template_images:"
+msgid "Use template's images"
+msgstr "Bilder des Artikels verwenden"
+
 msgctxt "field:product.product-product.product,create_date:"
 msgid "Create Date"
 msgstr "Erstellungsdatum"
