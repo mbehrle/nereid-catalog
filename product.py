@@ -327,12 +327,10 @@ class Product:
         recent_products = deque(
             session.setdefault('recent-products', []), cls.recent_list_size
         )
-        # XXX: If a product is already in the recently viewed list, but it
-        # would be nice to remember the recent_products list in the order of
-        # visits.
-        if product_id not in recent_products:
-            recent_products.appendleft(product_id)
-            session['recent-products'] = list(recent_products)
+        if product_id in recent_products:
+            recent_products.remove(product_id)
+        recent_products.appendleft(product_id)
+        session['recent-products'] = list(recent_products)
         return recent_products
 
     @classmethod
