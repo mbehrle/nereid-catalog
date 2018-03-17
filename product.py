@@ -8,7 +8,7 @@ from nereid import jsonify, Markup, current_locale
 from nereid.contrib.pagination import Pagination
 from nereid.contrib.sitemap import SitemapIndex, SitemapSection
 from werkzeug.exceptions import NotFound
-from flask.ext.babel import format_currency
+from flask_babel import format_currency
 
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.pyson import Eval, Not, Bool
